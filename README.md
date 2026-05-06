@@ -100,17 +100,14 @@ The list of career pages to scrape. Each row is one company. Columns:
 | `URL`        | yes      | Full URL of the career page or API endpoint |
 | `Fields`     | no       | Domains the company hires in (for reference only) |
 | `Preference` | no       | Personal interest rating (⭐ to ⭐⭐⭐) |
-| `Selector`   | for html | CSS selector matching the `<a>` elements that link to job postings |
-| `Type`       | yes      | Either `html` (generic scraper) or `workable_api` |
+| `Selector`   | for html | Link to job postings page |
+| `Type`       | yes      | `html`, `workable_api`, or `ashby_api` |
 
-To add a new company:
 
-1. Open the company's career page in Chrome
-2. Right-click on a job title → Inspect
-3. Find a CSS selector that uniquely matches the job link `<a>` elements (e.g. `a[href*='/jobs/']`)
-4. Append a row to `sources.csv`
 
-For Workable-hosted boards, the API endpoint pattern is `https://apply.workable.com/api/v3/accounts/<slug>/jobs` — much more reliable than scraping the HTML. Leave `Selector` empty for these rows.
+For Workable-hosted boards, the API endpoint pattern is `https://apply.workable.com/api/v3/accounts/<slug>/jobs`. Leave `Selector` empty for these rows.
+
+For Ashby-hosted boards (`jobs.ashbyhq.com/<slug>`), set `URL` to the public careers page (e.g. `https://jobs.ashbyhq.com/linear`) and `Type` to `ashby_api`. The scraper derives the slug automatically and hits the public JSON API. Leave `Selector` empty.
 
 ### `config/keywords.json`
 
@@ -136,7 +133,7 @@ To reduce cost further, switch the model in `search_jobs.py` from `claude-opus-4
 
 ## Known limitations
 
-- **JS-rendered career pages.** Sites that load their job board via client-side JavaScript (Linear, anything on Ashby's `jobs.ashbyhq.com`, Notion, Replit) are not fully scraped by the basic HTML fetcher — it only sees the initial HTML, not the hydrated content. To handle these, add Playwright as a dependency and write a headless-browser fetcher. The current setup is intentionally lightweight; about 70% of sources work out of the box.
+- **JS-rendered career pages.** Sites that load their job board via client-side JavaScript (Notion, Replit, custom-built boards) are not fully scraped by the basic HTML fetcher: it only sees the initial HTML, not the hydrated content. To handle these, add Playwright as a dependency and write a headless-browser fetcher. Workable and Ashby boards are exempt from this limitation as they are fetched via their public JSON APIs.
 - **Anti-bot protections.** LinkedIn Jobs and Welcome to the Jungle block anonymous scraping. The official APIs require accounts and authentication. Not included by default.
 - **Title-based filtering only.** The pre-filter looks at job titles, not descriptions. A misleading title (e.g. "Software Engineer" that turns out to be a frontend role) may slip through or be missed. The Claude scoring step partially compensates by reading the title in context.
 - **No de-duplication across sources.** If the same job is listed on the company site and on Welcome to the Jungle, it is scored twice. In practice rare since only one source per company is configured.

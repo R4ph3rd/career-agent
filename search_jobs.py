@@ -84,6 +84,22 @@ def fetch_workable_api(url):
     ]
 
 
+def fetch_ashby_api(url):
+    """Ashby's public job board API. The slug is the last path segment of
+    the jobs.ashbyhq.com URL (e.g. https://jobs.ashbyhq.com/linear → 'linear').
+    """
+    slug = url.rstrip("/").split("/")[-1]
+    api_url = f"https://api.ashbyhq.com/posting-api/job-board/{slug}"
+    resp = requests.get(api_url, headers=HTTP_HEADERS, timeout=HTTP_TIMEOUT)
+    resp.raise_for_status()
+    data = resp.json()
+    return [
+        (j["title"], j["postingUrl"])
+        for j in data.get("jobs", [])
+        if j.get("title") and j.get("postingUrl")
+    ]
+
+
 def fetch_html(url, selector):
     """Generic HTML scraper. Looks for <a> elements matching the CSS selector
     and extracts (title, absolute_url) tuples.
@@ -112,6 +128,8 @@ def fetch_jobs(source):
     try:
         if source["type"] == "workable_api":
             return fetch_workable_api(source["url"])
+        elif source["type"] == "ashby_api":
+            return fetch_ashby_api(source["url"])
         elif source["type"] == "html":
             return fetch_html(source["url"], source["selector"])
         else:

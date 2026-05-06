@@ -32,7 +32,7 @@ Rename it to `brief.md` before running the bot.
 ## Hard constraints (auto-pass)
 
 - e.g. Consulting / body-shopping firms
-- e.g. Companies > 5000 employees
+- e.g. Companies >² 5000 employees
 - e.g. Roles requiring US work authorization
 - e.g. Mandatory on-site 5 days a week
 
