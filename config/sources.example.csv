@@ -1,0 +1,4 @@
+Company,Location,URL,Fields,Preference,Selector,Type
+Acme Corp,"New York, Remote",https://acmecorp.com/careers,"Engineering, Product",⭐⭐⭐,a[href*='/careers/'],html
+Example AI,"London, Berlin",https://example.ai/jobs,"AI, Engineering",⭐⭐,a[href*='/jobs/'],html
+Open Source Co,"Full remote",https://apply.workable.com/api/v3/accounts/opensourceco/jobs,"Engineering, DevTools",⭐⭐,,workable_api

@@ -1,0 +1,35 @@
+{
+  "include": [
+    "software engineer",
+    "backend engineer",
+    "frontend engineer",
+    "fullstack",
+    "full-stack",
+    "full stack",
+    "tech lead",
+    "staff engineer",
+    "platform engineer",
+    "research engineer"
+  ],
+  "exclude": [
+    "sales",
+    "marketing",
+    "sdr",
+    "account executive",
+    "account manager",
+    "recruiter",
+    "talent",
+    "people ops",
+    "hr ",
+    "finance",
+    "legal",
+    "counsel",
+    "compliance",
+    "intern",
+    "internship",
+    "director",
+    "vp ",
+    "cto",
+    "cpo"
+  ]
+}

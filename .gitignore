@@ -1,0 +1,7 @@
+# Private config — copy the .example.* files and fill in your own data
+config/brief.md
+config/keywords.json
+config/sources.csv
+
+# Job cache — committed by the workflow, not manually
+seen_jobs.json

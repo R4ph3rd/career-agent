@@ -1,0 +1,40 @@
+name: Job Search Bot
+
+on:
+  schedule:
+    # Runs every 3 days at 08:00 UTC (10:00 CET)
+    - cron: '0 8 */3 * *'
+  workflow_dispatch:  # Allows manual trigger from the Actions UI
+
+jobs:
+  search:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      contents: write
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install anthropic requests beautifulsoup4 lxml
+
+      - name: Run job search
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+        run: python search_jobs.py
+
+      - name: Commit seen-jobs cache
+        run: |
+          git config user.name "Job Bot"
+          git config user.email "bot@github.actions"
+          git add seen_jobs.json || true
+          git diff --staged --quiet || git commit -m "Update seen jobs cache"
+          git push || true
