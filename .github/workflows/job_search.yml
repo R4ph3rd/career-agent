@@ -27,11 +27,23 @@ jobs:
       - name: Write config from secrets
         env:
           BRIEF_CONTENT: ${{ secrets.BRIEF_CONTENT }}
+          KEYWORDS_JSON: ${{ secrets.KEYWORDS_JSON }}
+          SOURCES_CSV: ${{ secrets.SOURCES_CSV }}
         run: |
           if [ -n "$BRIEF_CONTENT" ]; then
             printf '%s' "$BRIEF_CONTENT" > config/brief.md
           else
             cp config/brief.example.md config/brief.md
+          fi
+          if [ -n "$KEYWORDS_JSON" ]; then
+            printf '%s' "$KEYWORDS_JSON" > config/keywords.json
+          else
+            cp config/keywords.example.json config/keywords.json
+          fi
+          if [ -n "$SOURCES_CSV" ]; then
+            printf '%s' "$SOURCES_CSV" > config/sources.csv
+          else
+            cp config/sources.example.csv config/sources.csv
           fi
 
       - name: Run job search
