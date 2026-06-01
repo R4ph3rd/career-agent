@@ -24,6 +24,16 @@ jobs:
       - name: Install dependencies
         run: pip install anthropic requests beautifulsoup4 lxml
 
+      - name: Write config from secrets
+        env:
+          BRIEF_CONTENT: ${{ secrets.BRIEF_CONTENT }}
+        run: |
+          if [ -n "$BRIEF_CONTENT" ]; then
+            printf '%s' "$BRIEF_CONTENT" > config/brief.md
+          else
+            cp config/brief.example.md config/brief.md
+          fi
+
       - name: Run job search
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
